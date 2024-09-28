@@ -111,6 +111,12 @@ details_model = genai.GenerativeModel(
   system_instruction="This model finds information on a specific event happening in the city of pittsburgh and gives detailed information by searching the web regarding the event, search the web for information regarding the weather around the event, and search the web for information regarding the parking available around the event.",
 )
 
+# landing page api route
+
+@app.route('/')
+def landingPage():
+    return 'Pittsburgh Event Finder'
+
 # events api route
     # start = the start date for the range of time events should be searched
     # end = the end date for the range of time events should be searched
@@ -143,4 +149,4 @@ def details():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    app.run()
