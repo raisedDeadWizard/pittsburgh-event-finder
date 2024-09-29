@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Define your backend API base URL
-const base_url = process.env.FLASK_URL; // Replace with your actual backend URL
+const base_url = process.env.REACT_APP_FLASK_URL; // Replace with your actual backend URL
 console.log("[URL]: ", base_url)
 
 // Example function to fetch events from the backend
