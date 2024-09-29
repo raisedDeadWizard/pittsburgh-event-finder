@@ -1,13 +1,14 @@
 import axios from 'axios';
 
 // Define your backend API base URL
-const BASE_URL = process.env.FLASK_URL; // Replace with your actual backend URL
+const base_url = process.env.FLASK_URL; // Replace with your actual backend URL
+console.log("[URL]: ", base_url)
 
 // Example function to fetch events from the backend
 export const fetchEvents = async (start, end, type) => {
   try {
     console.log("[FETCH] fetching events between ", start, "-", end, " of type: ",type);
-    const response = await axios.get(`${BASE_URL}/events?start=${start}&end=${end}&type=${type}`);
+    const response = await axios.get(`${base_url}/events?start=${start}&end=${end}&type=${type}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching events:', error);
