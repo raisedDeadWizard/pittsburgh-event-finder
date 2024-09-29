@@ -187,6 +187,15 @@ function App() {
         )}
       </div>
 
+      <div class="event-details" >
+        <h2>EVENT NAME</h2>
+        <b>Description: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
+        <b>Date: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
+        <b>Time: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
+        <b>Weather: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
+        <b>Parking: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
+      </div>
+
     </div>
   );
 }

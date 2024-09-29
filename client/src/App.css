@@ -186,4 +186,5 @@ input[type="checkbox"]:checked {
 
 .event-details {
   display: none;
+  visibility: hidden;
 }
