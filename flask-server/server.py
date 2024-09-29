@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai import OpenAI
+from datetime import datetime, timedelta
 import json
 import os
 import requests
@@ -56,6 +57,18 @@ def google_search(query, num_results_per_event=2, num_events=5):
     if response.status_code != 200:
         return f"Error: Unable to perform search. Status code: {response.status_code}"
 
+
+    # Check for Last-Modified header
+    last_modified = response.headers.get('Last-Modified')
+    if last_modified:
+        # Parse the Last-Modified date
+        last_modified_date = datetime.strptime(last_modified, '%a, %d %b %Y %H:%M:%S %Z')
+        
+        # Check if the page was updated in the last 3 weeks
+        two_weeks_ago = datetime.now() - timedelta(weeks=2)
+        if last_modified_date < two_weeks_ago:
+            return None  # Ignore pages older than 3 weeks
+        
     soup = BeautifulSoup(response.text, 'html.parser')
     results = []
     search_results = soup.find_all('div', class_='g')
