@@ -179,7 +179,7 @@ function App() {
               <p>Time: {event.time}</p>
               <p>Location: {event.location}</p>
               <p>Description: {event.description}</p>
-              <p>Source: <a href={event["web-source"]} target="_blank" rel="noopener noreferrer">{event["web-source"]}</a></p>
+              <p>Source: <a href={event["search-source"]} target="_blank" rel="noopener noreferrer">{event["search-source"]}</a></p>
             </div>
           ))
         ) : (

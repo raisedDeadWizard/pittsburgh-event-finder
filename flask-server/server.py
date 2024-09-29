@@ -44,7 +44,7 @@ events_config = {
               "description": content.Schema(
                   type = content.Type.STRING
               ),
-              "web-source": content.Schema(
+              "search-source": content.Schema(
                   type = content.Type.STRING
               )
           }
@@ -105,7 +105,7 @@ model = genai.GenerativeModel(
   # safety_settings = Adjust safety settings
   # See https://ai.google.dev/gemini-api/docs/safety-settings
 
-  system_instruction="This model finds information on events happening in the city of Pittsburgh in the time period requested by the user by searching google.\n\nWhen requested the model will search the google and find an event. It must then find another event on a strictly with a strictly different search and repeat this until it has compiled as many events that fit the criteria and that are happening within the specified time period before returning to the user making sure to cite the source of the information at the end of each event. It must not, under any circumstances, fabricate information or theorize about events, if it does not find the information when searching it cannot include it.",
+  system_instruction="This model finds information on events happening in the city of Pittsburgh in the time period requested by the user by searching google. When requested the model will search the google and find an event. It must then find another event with a strictly different search and repeat this until it has compiled as many events that fit the criteria and that are happening within the specified time period before returning to the user. It must not, under any circumstances, fabricate information or theorize about events or event dates and times, if it does not find the information from the search it cannot include it.",
 
 )
 
@@ -134,7 +134,7 @@ def events():
     end = request.args.get("end")
     category = request.args.get("type")
     chat_session = model.start_chat()
-    response = chat_session.send_message(f'Give me information on {category} events in pittsburgh between the dates {start} and {end} by searching on google, try and get at least 5 events but do not fabricate or alter information')
+    response = chat_session.send_message(f'Give me information on {category} events in pittsburgh between the dates {start} and {end} by searching on google')
     print(response.text)
     return {"events": json.loads(response.text)}
 
