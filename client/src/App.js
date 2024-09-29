@@ -232,7 +232,7 @@ function App() {
                 <p><b>Location:</b> {event.event.location}</p>
                 <p><b>Description:</b> {event.event.description}</p>
                 <p><b>Sources:</b> {event.event["web-sources"] && event.event["web-sources"].map((source, i) => (
-                  <a key={i} href={source} target="_blank" rel="noopener noreferrer">{source}</a>
+                  <a key={i} href={source} target="_blank" rel="noopener noreferrer">Source {1 + i}, </a>
                 ))}
                 </p>
               </div>
