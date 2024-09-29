@@ -7,7 +7,6 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import urllib.parse
-import ast
 
 # web scraping
 def fetch_webpage_content(url):
@@ -120,17 +119,19 @@ client = OpenAI(
 
 
 schema_description = (
-        "Please respond with a list of events in the following json format:\n"
-        "'events': 'a list of all the events gathered' {\n"
-        "  'event': 'the object containing event information' {"
-        "       'date': 'The date of the event.',\n"
-        "       'description': 'Detailed explanation of the event.',\n"
-        "       'time': 'The time of the event.',\n"
-        "       'web-sources': 'The sources on the web the info was gathered from. Should be more than one.',\n"
-        "       'name': 'The name of the event.',\n"
-        "       'location': 'The location of the event.',\n"
-        "   }"
-        "}"
+       """Please respond with a list of events in the following json format:
+    {
+        "events": "a list of all the events gathered",
+        "event": {
+            "date": "The date of the event.",
+            "description": "Detailed explanation of the event.",
+            "time": "The time of the event.",
+            "web-sources": "The sources on the web the info was gathered from. Should be more than one.",
+            "name": "The name of the event.",
+            "location": "The location of the event."
+        }
+    }
+    """
     )
 
 context = (
@@ -182,10 +183,8 @@ def events():
     )
 
     resp = response.choices[0].message.content.strip("```json").strip("```")
-    resp_ast = ast.literal_eval(resp)
     print(resp)
-    print(resp_ast)
-    return (resp_ast)
+    return json.loads(resp)
 
 # events/details api route
     # start = the start date for the event for which the details are being gathered
