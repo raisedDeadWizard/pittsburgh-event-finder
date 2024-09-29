@@ -218,12 +218,12 @@ function App() {
           {eventList.length > 0 ? (
             eventList.map((event, index) => (
               <div key={index} className="event-item">
-                <h3>{event.event.name}</h3>
-                <p><b>Date:</b> {event.event.date}</p>
-                <p><b>Time:</b> {event.event.time}</p>
-                <p><b>Location:</b> {event.event.location}</p>
-                <p><b>Description:</b> {event.event.description}</p>
-                <p><b>Sources:</b> {event.event["web-sources"] && event.event["web-sources"].map((source, i) => (
+                <h3>{event.name}</h3>
+                <p><b>Date:</b> {event.date}</p>
+                <p><b>Time:</b> {event.time}</p>
+                <p><b>Location:</b> {event.location}</p>
+                <p><b>Description:</b> {event.description}</p>
+                <p><b>Sources:</b> {event["web-sources"] && event["web-sources"].map((source, i) => (
                   <a key={i} href={source} target="_blank" rel="noopener noreferrer">Source {1 + i}, </a>
                 ))}
                 </p>
