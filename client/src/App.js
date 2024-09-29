@@ -49,6 +49,36 @@ function App() {
     }));
   };
 
+  // Function to select all categories and subcategories
+  const handleSelectAll = () => {
+    setEvents((prevEvents) => {
+      const updatedEvents = {};
+      for (const [event, data] of Object.entries(prevEvents)) {
+        updatedEvents[event] = {
+          ...data,
+          selected: true,
+          subcategories: Object.fromEntries(Object.entries(data.subcategories).map(([key]) => [key, true])),
+        };
+      }
+      return updatedEvents;
+    });
+  };
+
+  // Function to deselect all categories and subcategories
+  const handleDeselectAll = () => {
+    setEvents((prevEvents) => {
+      const updatedEvents = {};
+      for (const [event, data] of Object.entries(prevEvents)) {
+        updatedEvents[event] = {
+          ...data,
+          selected: false,
+          subcategories: Object.fromEntries(Object.entries(data.subcategories).map(([key]) => [key, false])),
+        };
+      }
+      return updatedEvents;
+    });
+  };
+
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,7 +111,7 @@ function App() {
           />
         </div>
         <div className="form-group event-options">
-          <label>Event Types:</label>
+          <label>Event Types:</label> 
           {Object.entries(events).map(([event, { selected, subcategories }]) => (
             <div key={event} className="event-option">
               <label>
@@ -109,7 +139,17 @@ function App() {
             </div>
           ))}
         </div>
-        <button type="submit">Search Events</button>
+        <div className="button-group">
+          <button type="button" className="btn btn-secondary" onClick={handleSelectAll}>
+            Select All
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={handleDeselectAll}>
+            Deselect All
+          </button>
+          <button type="submit" className="btn btn-primary">
+            Search Events
+          </button>
+        </div>
       </form>
     </div>
   );
