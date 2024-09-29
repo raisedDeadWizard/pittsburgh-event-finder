@@ -160,6 +160,8 @@ function App() {
             onClick={async () => {
               let resp = await fetchEvents("september 28th 2024", "october 1st 2024", customCategory)
               console.log("[RESPONSE]: ", resp);
+              setEventList(resp.events);
+              console.log("[RESPONSE] eventList: ", eventList)
             }
             }>
             Search Events
