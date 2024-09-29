@@ -37,7 +37,7 @@ def fetch_webpage_content(url):
     except requests.exceptions.RequestException as e:
         return f"Error fetching content from {url}: {e}"
 
-def google_search(query, num_results_per_event=2, num_events=5):
+def google_search(query, num_results_per_event=3, num_events=15):
     """
     Perform a Google search, return titles, links, and webpage content for events with two valid sources.
     
@@ -125,7 +125,7 @@ schema_description = (
         "       'date': 'The date of the event.',\n"
         "       'description': 'Detailed explanation of the event.',\n"
         "       'time': 'The time of the event.',\n"
-        "       'web-source': 'The source on the web the info was gathered from.',\n"
+        "       'web-sources': 'The sources on the web the info was gathered from. Should be more than one.',\n"
         "       'name': 'The name of the event.',\n"
         "       'location': 'The location of the event.',\n"
         "   }"
