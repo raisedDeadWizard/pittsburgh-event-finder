@@ -21,6 +21,7 @@ function App() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [events, setEvents] = useState(eventCategories);
+  const [eventList, setEventList] = useState([]);
   const [customCategory, setCustomCategory] = useState('');
 
   // Function to handle changes in event checkboxes
@@ -158,7 +159,7 @@ function App() {
           />
           <button type="submit" className="btn btn-primary"
             onClick={async () => {
-              let resp = await fetchEvents("september 28th 2024", "october 1st 2024", customCategory)
+              let resp = await setEventList(fetchEvents("september 28th 2024", "october 1st 2024", customCategory))
               console.log("[RESPONSE]: ", resp);
             }
             }>
@@ -166,6 +167,24 @@ function App() {
           </button>
         </div>
       </form>
+
+      <div className="event-list">
+        {eventList.length > 0 ? (
+          eventList.map((event, index) => (
+            <div key={index} className="event-item">
+              <h3>{event.name}</h3>
+              <p>Date: {event.date}</p>
+              <p>Time: {event.time}</p>
+              <p>Location: {event.location}</p>
+              <p>Description: {event.description}</p>
+              <p>Source: <a href={event["web-source"]} target="_blank" rel="noopener noreferrer">{event["web-source"]}</a></p>
+            </div>
+          ))
+        ) : (
+          <p>No events found. Please search to display events.</p>
+        )}
+      </div>
+
     </div>
   );
 }
