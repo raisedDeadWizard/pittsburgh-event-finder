@@ -5,10 +5,14 @@ function App() {
   // State variables for start date, end date, and events with subcategories
 
   const eventCategories = {
+    "Cultural Events": { selected: false, subcategories: { "Festivals": true, "Art exhibitions": true} },
     conference: { selected: false, subcategories: { networking: true, panels: true } },
     webinar: { selected: false, subcategories: { liveQnA: true, recordings: true } },
     workshop: { selected: false, subcategories: { handsOn: true, groupWork: true } },
     art: { selected: false, subcategories: { craft: true, exhibit: true } },
+    "Cultural Events": { selected: false, subcategories: { Festivals: true, "Art exhibitions": true } },
+    "Sports Events": { selected: false, subcategories: { "Races": true, "Tournaments": true } },
+    "Sports Events": { selected: false, subcategories: { "Races": true, "Tournaments": true } },
   };
 
   const [startDate, setStartDate] = useState('');
@@ -74,7 +78,7 @@ function App() {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <div className="form-group">
+        <div className="form-group event-options">
           <label>Event Types:</label>
           {Object.entries(events).map(([event, { selected, subcategories }]) => (
             <div key={event} className="event-option">
