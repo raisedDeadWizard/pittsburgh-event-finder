@@ -7,16 +7,16 @@ function App() {
   // State variables for start date, end date, and events with subcategories
 
   const eventCategories = {
-    "Nightlife": { selected: false, subcategories: { "Concerts": true, "Theater": true, "Clubs/Bars": true, } },
-    "Sports": { selected: false, subcategories: { "Games": true, "Fitness": true, "Outdoor": true, } },
-    "Arts": { selected: false, subcategories: { "Exhibits": true, "Festivals": true, "Classes": true, } },
-    "Food/Drink": { selected: false, subcategories: { "Festivals": true, "Classes": true, "Dinners": true, } },
-    "Civic": { selected: false, subcategories: { "Town Hall": true, "Voting": true, "Volunteer": true, } },
-    "Education": { selected: false, subcategories: { "Talks": true, "Clases": true, "Tours": true, } },
-    "Wellness": { selected: false, subcategories: { "Retreats": true, "Screenings": true, "Support": true, } },
-    "Shopping": { selected: false, subcategories: { "Markets": true, "Flea Market": true, "Pop-ups": true, } },
-    "Tech": { selected: false, subcategories: { "Conferences": true, "Hackathon": true, "Launches": true, } },
-    "Outdoor": { selected: false, subcategories: { "Walks": true, "Festivals": true, "Adventure": true, } },
+    "Nightlife": { selected: false, subcategories: { "Concerts": false, "Theater": false, "Clubs/Bars": false, } },
+    "Sports": { selected: false, subcategories: { "Games": false, "Fitness": false, "Outdoor": false, } },
+    "Arts": { selected: false, subcategories: { "Exhibits": false, "Festivals": false, "Classes": false, } },
+    "Food/Drink": { selected: false, subcategories: { "Festivals": false, "Classes": false, "Dinners": false, } },
+    "Civic": { selected: false, subcategories: { "Town Hall": false, "Voting": false, "Volunteer": false, } },
+    "Education": { selected: false, subcategories: { "Talks": false, "Clases": false, "Tours": false, } },
+    "Wellness": { selected: false, subcategories: { "Retreats": false, "Screenings": false, "Support": false, } },
+    "Shopping": { selected: false, subcategories: { "Markets": false, "Flea Market": false, "Pop-ups": false, } },
+    "Tech": { selected: false, subcategories: { "Conferences": false, "Hackathon": false, "Launches": false, } },
+    "Outdoor": { selected: false, subcategories: { "Walks": false, "Festivals": false, "Adventure": false, } },
   };
 
   const [startDate, setStartDate] = useState('');
@@ -24,6 +24,17 @@ function App() {
   const [events, setEvents] = useState(eventCategories);
   const [eventList, setEventList] = useState([]);
   const [customCategory, setCustomCategory] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Helper function to get today's date in YYYY-MM-DD format
+  const getToday = () => new Date().toISOString().split('T')[0];
+
+  // Helper function to get the date 7 days from today
+  const getSevenDaysFromToday = () => {
+    const today = new Date();
+    const nextWeek = new Date(today.setDate(today.getDate() + 7));
+    return nextWeek.toISOString().split('T')[0];
+  };
 
   // Function to handle changes in event checkboxes
   const handleEventChange = (event) => {
@@ -83,19 +94,51 @@ function App() {
     });
   };
 
-  // Function to handle form submission
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle the form submission logic here
-    console.log('Start Date:', startDate);
-    console.log('End Date:', endDate);
-    console.log('Selected Events and Subcategories:', events);
+    setLoading(true);
+
+    // Set defaults for the start and end dates
+    let finalStartDate = startDate || getToday(); // Default to today if start date not set
+    let finalEndDate = endDate || (startDate ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 7)).toISOString().split('T')[0] : getSevenDaysFromToday()); // Default to 7 days later
+
+    if (endDate && !startDate) {
+      finalStartDate = endDate; // Set start date to end date if only end date is provided
+    }
+
+    // Gather selected categories and subcategories
+    const selectedCategories = [];
+    for (const [category, data] of Object.entries(events)) {
+      if (data.selected) {
+        const selectedSubcategories = Object.entries(data.subcategories)
+          .filter(([_, isChecked]) => isChecked)
+          .map(([subcategory]) => subcategory);
+        selectedCategories.push(`${category}: ${selectedSubcategories.join(', ')}`);
+      }
+    }
+
+    const category = selectedCategories.join('; '); // Create formatted string of selected categories
+
+    console.log('Start Date:', finalStartDate);
+    console.log('End Date:', finalEndDate);
+    console.log('Categories:', category);
+
+    // Pass these to the API or logic that fetches events
+    try {
+      const resp = await fetchEvents(finalStartDate, finalEndDate, category || customCategory);
+      setEventList(resp.events);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false); // Set loading to false once the fetch completes
+    }
   };
 
   function LoadingComponent() {
     return (
       <div class="loadingComponent">
-        <ClipLoader color="#a3a3a3" loading={true} size={50} />
+        <ClipLoader color="#a3a3a3" loading={loading} size={50} />
       </div>
     );
   }
@@ -166,49 +209,39 @@ function App() {
             value={customCategory}
             onChange={(e) => setCustomCategory(e.target.value)}
           />
-          <button type="submit" className="btn btn-primary"
-            onClick={async () => {
-              let resp = await (fetchEvents("september 28th 2024", "october 1st 2024", customCategory))
-              console.log("[RESPONSE]: ", resp);
-              setEventList(resp.events);
-              console.log("[RESPONSE] eventList: ", eventList)
-            }
-            }>
+          <button type="submit" className="btn btn-primary">
             Search Events
           </button>
         </div>
       </form>
-
-      <div className="event-list">
-        {eventList.length > 0 ? (
-          eventList.map((event, index) => (
-            <div key={index} className="event-item">
-              <h3>{event.event.name}</h3>
-              <p><b>Date:</b> {event.event.date}</p>
-              <p><b>Time:</b> {event.event.time}</p>
-              <p><b>Location:</b> {event.event.location}</p>
-              <p><b>Description:</b> {event.event.description}</p>
-              <p><b>Sources:</b> {event.event["web-sources"] && event.event["web-sources"].map((source, i) => (
-                <a 
-                  key={i} 
-                  href={source} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{ marginRight: '10px' }} // Optional spacing between links
-                >
-                  Source {1 + i}
-                </a>
-              ))}
-              </p>
+      
+      {/* Loading spinner */}
+      {loading ? (
+        <div className="loading">
+          <ClipLoader size={50} color={"#123abc"} loading={true} />
+          <p>Loading events...</p>
+        </div>
+      ) : (
+        <div className="event-list">
+          {eventList.length > 0 ? (
+            eventList.map((event, index) => (
+              <div key={index} className="event-item">
+                <h3>{event.event.name}</h3>
+                <p><b>Date:</b> {event.event.date}</p>
+                <p><b>Time:</b> {event.event.time}</p>
+                <p><b>Location:</b> {event.event.location}</p>
+                <p><b>Description:</b> {event.event.description}</p>
+                <p><b>Sources:</b> {event.event["web-sources"] && event.event["web-sources"].map((source, i) => (
+                  <a key={i} href={source} target="_blank" rel="noopener noreferrer">{source}</a>
+                ))}
+                </p>
               </div>
-          ))
-        ) : (
-          <p>No events found. Please search to display events.</p>
-        )}
-      </div>
-
-
-      <LoadingComponent />
+            ))
+          ) : (
+            <p>No events found. Please search to display events.</p>
+          )}
+        </div>
+      )}
 
       <p>Event listings are generated via AI webscraping of at least three different sources. Before attending an event, do a personal confirmation of the information's correctness.</p>
     </div>
