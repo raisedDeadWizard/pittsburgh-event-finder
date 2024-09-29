@@ -19,7 +19,7 @@ export const fetchEvents = async (start, end, type) => {
 // Example function to fetch event detailed information from the backend
 export const fetchEventDetails = async (start, end, event) => {
   try {
-    const response = await axios.get(`${BASE_URL}/events/details?start=${start}&end=${end}&event=${event}`);
+    const response = await axios.get(`${base_url}/events/details?start=${start}&end=${end}&event=${event}`);
     return response.data;
   } catch (error) {
     console.error('Error submitting filter:', error);
