@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 import json
 import google.generativeai as genai
 from google.ai.generativelanguage_v1beta.types import content
@@ -7,6 +8,9 @@ import os
 
 # Flask app definintion
 app = Flask(__name__)
+
+CORS(app)
+# CORS(app, origins=[os.environ["FRONTEND_URL"]])
 
 # Gemini AI Configuration
 genai.configure(api_key=os.environ["API_KEY"])

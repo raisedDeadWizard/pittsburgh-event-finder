@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { fetchEvents, fetchEventDetails } from './api';
 import './App.css'; // Assuming you have some CSS styling in App.css
 
 function App() {
@@ -155,8 +156,12 @@ function App() {
             value={customCategory}
             onChange={(e) => setCustomCategory(e.target.value)}
           />
-
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" 
+            onClick={async () => {
+              let resp = await fetchEvents("september 28th 2024", "october 1st 2024", customCategory)
+              console.log("[RESPONSE]: ", resp);
+            }
+            }>
             Search Events
           </button>
         </div>
