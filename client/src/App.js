@@ -187,7 +187,7 @@ function App() {
                   rel="noopener noreferrer"
                   style={{ marginRight: '10px' }} // Optional spacing between links
                 >
-                  Source {i + 1}
+                  {source}
                 </a>
               ))}
               </p>
