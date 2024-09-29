@@ -1,5 +1,7 @@
 body {
 
+  background-color: #00346b;
+
   background-image: url('./skyline.svg');
   background-size: cover;
   width: 100vw;
@@ -32,12 +34,14 @@ body {
 label {
   display: block;
   margin-bottom: 5px;
+  /* font-weight: bold; */
 }
 
 input[type='date'] {
   width: 98%;
   padding: 8px;
   margin-top: 5px;
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
@@ -61,21 +65,26 @@ button:hover {
 }
 
 .event-option {
-  margin-bottom: 5px;
+  margin-bottom: auto;
   margin-top: 5px;
   margin-left: 25px;
   float: left;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 10px;
-
+  /* flex-wrap: wrap; */
+  /* display: flex; */
+  max-height: 110px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 
 }
 
 .subcategories {
   margin-left: 10px;
-  margin-top: 5px;
-  border-left: 2px solid #ddd;
+  margin-top: -10px;
+  border-left: 2px solid #727272;
 }
 
 .subcategory-option {
@@ -140,7 +149,8 @@ input[type="checkbox"]:checked {
 .event-list {
   margin-top: 20px;
   padding: 10px;
-  border-top: 1px solid #ddd; /* Separates the list from the button group */
+  border-top: 1px solid #727272;
+  /* Separates the list from the button group */
 }
 
 .event-item {
@@ -148,8 +158,10 @@ input[type="checkbox"]:checked {
   border-radius: 6px;
   padding: 15px;
   margin-bottom: 10px;
-  background-color: #f9f9f9; /* Light background for event items */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  background-color: #f9f9f9;
+  /* Light background for event items */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Adds a subtle shadow */
 }
 
 .event-item h3 {
@@ -170,4 +182,8 @@ input[type="checkbox"]:checked {
 
 .event-item a:hover {
   text-decoration: underline;
+}
+
+.event-details {
+  display: none;
 }
