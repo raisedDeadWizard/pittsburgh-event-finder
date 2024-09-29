@@ -1,11 +1,12 @@
 import axios from 'axios';
 
 // Define your backend API base URL
-const BASE_URL = 'https://pittsburgh-event-finder.onrender.com'; // Replace with your actual backend URL
+const BASE_URL = os.environ["URL"]; // Replace with your actual backend URL
 
 // Example function to fetch events from the backend
 export const fetchEvents = async (start, end, type) => {
   try {
+    console.log("[FETCH] fetching events between ", start, "-", end, " of type: ",type);
     const response = await axios.get(`${BASE_URL}/events?start=${start}&end=${end}&type=${type}`);
     return response.data;
   } catch (error) {
