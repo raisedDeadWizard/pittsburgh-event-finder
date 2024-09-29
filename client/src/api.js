@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Define your backend API base URL
-const BASE_URL = process.env.URL; // Replace with your actual backend URL
+const BASE_URL = process.env.FLASK_URL; // Replace with your actual backend URL
 
 // Example function to fetch events from the backend
 export const fetchEvents = async (start, end, type) => {
