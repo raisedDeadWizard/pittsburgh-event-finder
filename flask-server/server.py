@@ -163,7 +163,11 @@ def events():
 
     # Format the search results to pass to GPT for further processing
     formatted_results = "\n\n".join(
-        [f"Title: {result['title']}\nLinks: {', '.join(result['links'])}\nContent 1: {result['contents'][0]}\nContent 2: {result['contents'][1]}" for result in search_results if len(result['contents']) >= 2]
+        [
+            f"Title: {result['title']}\nLinks: {', '.join(result['links'])}\nContent 1: {result['contents'][0]}\nContent 2: {result['contents'][1]}"
+            for result in search_results
+            if isinstance(result, dict) and 'title' in result and 'links' in result and 'contents' in result and len(result['contents']) >= 2
+        ]
     )
     print(formatted_results)
 
