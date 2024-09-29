@@ -134,7 +134,7 @@ def events():
     end = request.args.get("end")
     category = request.args.get("type")
     chat_session = model.start_chat()
-    response = chat_session.send_message(f'Give me information on {category} events in pittsburgh between the dates {start} and {end}')
+    response = chat_session.send_message(f'Give me information on as many {category} events in pittsburgh between the dates {start} and {end} as you can find, max 10')
     print(response.text)
     return {"events": json.loads(response.text)}
 
