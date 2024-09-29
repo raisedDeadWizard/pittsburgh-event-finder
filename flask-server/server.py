@@ -7,6 +7,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import urllib.parse
+import ast
 
 # web scraping
 def fetch_webpage_content(url):
@@ -181,8 +182,10 @@ def events():
     )
 
     resp = response.choices[0].message.content.strip("```json").strip("```")
+    resp_ast = ast.literal_eval(resp)
     print(resp)
-    return json.loads(resp)
+    print(resp_ast)
+    return (resp_ast)
 
 # events/details api route
     # start = the start date for the event for which the details are being gathered
