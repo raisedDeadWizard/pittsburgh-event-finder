@@ -161,7 +161,7 @@ function App() {
             onClick={async () => {
               let resp = await (fetchEvents("september 28th 2024", "october 1st 2024", customCategory))
               console.log("[RESPONSE]: ", resp);
-              setEventList(resp.events);
+              setEventList(resp.events.events);
               console.log("[RESPONSE] eventList: ", eventList)
             }
             }>
@@ -179,8 +179,19 @@ function App() {
               <p>Time: {event.time}</p>
               <p>Location: {event.location}</p>
               <p>Description: {event.description}</p>
-              <p>Source: <a href={event["search-source"]} target="_blank" rel="noopener noreferrer">{event["search-source"]}</a></p>
-            </div>
+              <p>Sources: {event["web_sources"] && event["web_sources"].map((source, i) => (
+                <a 
+                  key={i} 
+                  href={source} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{ marginRight: '10px' }} // Optional spacing between links
+                >
+                  Source {i + 1}
+                </a>
+              ))}
+              </p>
+              </div>
           ))
         ) : (
           <p>No events found. Please search to display events.</p>
