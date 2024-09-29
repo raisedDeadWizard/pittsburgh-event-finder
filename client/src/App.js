@@ -3,13 +3,17 @@ import './App.css'; // Assuming you have some CSS styling in App.css
 
 function App() {
   // State variables for start date, end date, and events with subcategories
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [events, setEvents] = useState({
+
+  const eventCategories = {
     conference: { selected: false, subcategories: { networking: true, panels: true } },
     webinar: { selected: false, subcategories: { liveQnA: true, recordings: true } },
     workshop: { selected: false, subcategories: { handsOn: true, groupWork: true } },
-  });
+    art: { selected: false, subcategories: { craft: true, exhibit: true } },
+  };
+
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [events, setEvents] = useState(eventCategories);
 
   // Function to handle changes in event checkboxes
   const handleEventChange = (event) => {
