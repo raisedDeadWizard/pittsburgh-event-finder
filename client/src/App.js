@@ -125,23 +125,15 @@ function App() {
     console.log('Categories:', category);
 
     // Pass these to the API or logic that fetches events
-    //try {
-    const resp = await fetchEvents(finalStartDate, finalEndDate, category || customCategory);
-    setEventList(resp.events);
-    //} catch (error) {
-      //console.error('Error fetching events:', error);
-    //} finally {
-    setLoading(false); // Set loading to false once the fetch completes
-    //}
+    try {
+      let resp = await fetchEvents(finalStartDate, finalEndDate, category || customCategory);
+      setEventList(resp.events);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false); // Set loading to false once the fetch completes
+    }
   };
-
-  function LoadingComponent() {
-    return (
-      <div class="loadingComponent">
-        <ClipLoader color="#a3a3a3" loading={loading} size={50} />
-      </div>
-    );
-  }
 
   return (
     <div className="App">
