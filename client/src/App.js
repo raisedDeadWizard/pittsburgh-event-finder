@@ -159,8 +159,10 @@ function App() {
           />
           <button type="submit" className="btn btn-primary" 
             onClick={async () => {
-              let resp = await setEventList(fetchEvents("september 28th 2024", "october 1st 2024", customCategory))
+              let resp = await (fetchEvents("september 28th 2024", "october 1st 2024", customCategory))
               console.log("[RESPONSE]: ", resp);
+              await setEventList(resp);
+              console.log("[RESPONSE] eventList: ", eventList)
             }
             }>
             Search Events
