@@ -5,16 +5,16 @@ function App() {
   // State variables for start date, end date, and events with subcategories
 
   const eventCategories = {
-    "Nightlife": { selected: false, subcategories: { "Concerts": true, "Theater": true, "Clubs/Bars": true,} },
-    "Sports": { selected: false, subcategories: { "Games": true, "Fitness": true, "Outdoor": true,} },
-    "Arts": { selected: false, subcategories: { "Exhibits": true, "Festivals": true, "Classes": true,} },
-    "Food/Drink": { selected: false, subcategories: { "Festivals": true, "Classes": true, "Dinners": true,} },
-    "Community": { selected: false, subcategories: { "Volunteer": true, "Meetups": true, "Charity": true,} },
-    "Education": { selected: false, subcategories: { "Talks": true, "Clases": true, "Tours": true,} },
-    "Wellness": { selected: false, subcategories: { "Retreats": true, "Screenings": true, "Support": true,} },
-    "Shopping": { selected: false, subcategories: { "Markets": true, "Flea Market": true, "Pop-ups": true,} },
-    "Tech": { selected: false, subcategories: { "Conferences": true, "Hackathon": true, "Launches": true,} },
-    "Outdoor": { selected: false, subcategories: { "Walks": true, "Festivals": true, "Adventure": true,} },
+    "Nightlife": { selected: false, subcategories: { "Concerts": true, "Theater": true, "Clubs/Bars": true, } },
+    "Sports": { selected: false, subcategories: { "Games": true, "Fitness": true, "Outdoor": true, } },
+    "Arts": { selected: false, subcategories: { "Exhibits": true, "Festivals": true, "Classes": true, } },
+    "Food/Drink": { selected: false, subcategories: { "Festivals": true, "Classes": true, "Dinners": true, } },
+    "Community": { selected: false, subcategories: { "Volunteer": true, "Meetups": true, "Charity": true, } },
+    "Education": { selected: false, subcategories: { "Talks": true, "Clases": true, "Tours": true, } },
+    "Wellness": { selected: false, subcategories: { "Retreats": true, "Screenings": true, "Support": true, } },
+    "Shopping": { selected: false, subcategories: { "Markets": true, "Flea Market": true, "Pop-ups": true, } },
+    "Tech": { selected: false, subcategories: { "Conferences": true, "Hackathon": true, "Launches": true, } },
+    "Outdoor": { selected: false, subcategories: { "Walks": true, "Festivals": true, "Adventure": true, } },
   };
 
   const [startDate, setStartDate] = useState('');
@@ -91,7 +91,7 @@ function App() {
 
   return (
     <div className="App">
-      <h2>Pittsburgh Event Finder</h2>
+      <h1>Pittsburgh Event Finder</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="start-date">Start Date:</label>
@@ -112,7 +112,7 @@ function App() {
           />
         </div>
         <div className="form-group event-options">
-          <label>Event Types:</label> 
+          <label>Event Types:</label>
           {Object.entries(events).map(([event, { selected, subcategories }]) => (
             <div key={event} className="event-option">
               <label>
@@ -141,13 +141,13 @@ function App() {
           ))}
         </div>
         <div className="button-group">
-        <button type="button" className="btn btn-secondary" onClick={handleSelectAll}>
+          <button type="button" className="btn btn-secondary" onClick={handleSelectAll}>
             Select All
           </button>
           <button type="button" className="btn btn-secondary" onClick={handleDeselectAll}>
             Deselect All
           </button>
-        <input
+          <input
             type="text"
             className="custom-category-input"
             maxLength="20"
@@ -155,7 +155,7 @@ function App() {
             value={customCategory}
             onChange={(e) => setCustomCategory(e.target.value)}
           />
-          
+
           <button type="submit" className="btn btn-primary">
             Search Events
           </button>
