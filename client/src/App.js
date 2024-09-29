@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { fetchEvents, fetchEventDetails } from './api';
 import './App.css'; // Assuming you have some CSS styling in App.css
+import { ClipLoader } from 'react-spinners';
 
 function App() {
   // State variables for start date, end date, and events with subcategories
@@ -90,6 +91,14 @@ function App() {
     console.log('End Date:', endDate);
     console.log('Selected Events and Subcategories:', events);
   };
+
+  function LoadingComponent() {
+    return (
+      <div class="loadingComponent">
+        <ClipLoader color="#a3a3a3" loading={true} size={50} />
+      </div>
+    );
+  }
 
   return (
     <div className="App">
@@ -198,6 +207,10 @@ function App() {
         )}
       </div>
 
+
+      <LoadingComponent />
+
+      <p>Event listings are generated via AI webscraping of at least three different sources. Before attending an event, do a personal confirmation of the information's correctness.</p>
     </div>
   );
 }
