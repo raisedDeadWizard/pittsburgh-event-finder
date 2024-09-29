@@ -199,19 +199,6 @@ function App() {
 
       <LoadingComponent />
 
-
-
-      {/* <div class="loader"></div> */}
-
-      <div class="event-details" >
-        <h2>EVENT NAME</h2>
-        <b>Description: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
-        <b>Date: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
-        <b>Time: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
-        <b>Weather: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
-        <b>Parking: </b> <p>yayayay ayayyaysydyfy yfyfyfyfysyy fbsbfsyfbsybfysbfysbf ysbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan. sbfyabfysbf ysbfysbfysbfhs jfdbnasjfnasjfns kanfoanf oanfka sjnfkan.</p> <a><p>This is a link.</p></a>
-      </div>
-
       <p>Event listings are generated via AI webscraping of at least three different sources. Before attending an event, do a personal confirmation of the information's correctness.</p>
     </div>
   );
