@@ -20,6 +20,7 @@ function App() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [events, setEvents] = useState(eventCategories);
+  const [customCategory, setCustomCategory] = useState('');
 
   // Function to handle changes in event checkboxes
   const handleEventChange = (event) => {
@@ -140,12 +141,21 @@ function App() {
           ))}
         </div>
         <div className="button-group">
-          <button type="button" className="btn btn-secondary" onClick={handleSelectAll}>
+        <button type="button" className="btn btn-secondary" onClick={handleSelectAll}>
             Select All
           </button>
           <button type="button" className="btn btn-secondary" onClick={handleDeselectAll}>
             Deselect All
           </button>
+        <input
+            type="text"
+            className="custom-category-input"
+            maxLength="20"
+            placeholder="Add custom category"
+            value={customCategory}
+            onChange={(e) => setCustomCategory(e.target.value)}
+          />
+          
           <button type="submit" className="btn btn-primary">
             Search Events
           </button>

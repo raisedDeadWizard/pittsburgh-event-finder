@@ -75,6 +75,7 @@ button:hover {
 
 .btn {
   padding: 8px;
+  
   border: 1px solid #ccc;
   border-radius: 4px;
   cursor: pointer;
@@ -82,17 +83,27 @@ button:hover {
 
 .btn-secondary {
   background-color: #f0f0f0;
+  
   color: #333;
   flex: 1;
 }
 
 .btn-primary {
   background-color: #007bff;
+  
   color: #fff;
-  flex: 2;
+  flex: 3;
 }
 
 .btn:hover {
   opacity: 0.8;
 }
 
+.custom-category-input {
+  flex: 1.5;
+  margin-top: 5px;
+  padding: 8px;
+  height: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
