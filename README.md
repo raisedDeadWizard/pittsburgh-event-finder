@@ -1,3 +1,6 @@
+# Pittsburgh Event Finder
+### Access at: https://pgheventfinder.us
+
 ## Inspiration
 It seems like everything and nothing is happening all the time. Many of us want to know what is going on - but don't have the time or energy to find out events beyond our usual schedules. The internet is a wealth of knowledge, however it can be very overwhelming and arduous to sort through.
 
