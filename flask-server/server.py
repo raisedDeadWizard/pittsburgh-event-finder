@@ -57,18 +57,6 @@ def google_search(query, num_results_per_event=2, num_events=5):
     if response.status_code != 200:
         return f"Error: Unable to perform search. Status code: {response.status_code}"
 
-
-    # Check for Last-Modified header
-    last_modified = response.headers.get('Last-Modified')
-    if last_modified:
-        # Parse the Last-Modified date
-        last_modified_date = datetime.strptime(last_modified, '%a, %d %b %Y %H:%M:%S %Z')
-        
-        # Check if the page was updated in the last 3 weeks
-        two_weeks_ago = datetime.now() - timedelta(weeks=2)
-        if last_modified_date < two_weeks_ago:
-            return None  # Ignore pages older than 3 weeks
-        
     soup = BeautifulSoup(response.text, 'html.parser')
     results = []
     search_results = soup.find_all('div', class_='g')
@@ -82,21 +70,34 @@ def google_search(query, num_results_per_event=2, num_events=5):
 
         # Get the links from multiple search results for each event
         link_elements = result.find_all('a', href=True)[:num_results_per_event]  # Get the first N links per event
-        links = [link_element['href'] for link_element in link_elements]
+        links = []
+        for link_element in link_elements:
+            link = link_element['href']
+            
+            # Check if the link is a relative URL (starts with /) and prepend Google domain
+            if link.startswith('/'):
+                link = f"https://www.google.com{link}"
+            
+            links.append(link)
 
         # Ensure we have at least 2 valid links for this event, skip if not
         if len(links) < 2:
             continue
 
-        # Fetch content from each link
-        contents = [fetch_webpage_content(link) for link in links]
+        # Fetch content from each link, but skip if not updated in last 3 weeks
+        contents = []
+        for link in links:
+            content = fetch_webpage_content(link)
+            if content:
+                contents.append(content)
 
-        # Append the result with title, links, and webpage contents
-        results.append({
-            'title': title,
-            'links': links,
-            'contents': contents  # List of contents from the two websites
-        })
+        # Only append events if both contents are valid (updated within 3 weeks)
+        if len(contents) == 2:
+            results.append({
+                'title': title,
+                'links': links,
+                'contents': contents  # List of contents from the two websites
+            })
 
     return results
 
@@ -134,6 +135,7 @@ schema_description = (
 context = (
     "You are a model that finds information on events happening in the city of Pittsburgh in the time period and within the categories requested by the user."
     "When requested the model will use the provided information scraped from the web and find an event that matches the criteria put forward by the user."
+    "The model may also search the web at the provided links to ensure the accuracy of provided information"
 )
 
 # landing page api route
