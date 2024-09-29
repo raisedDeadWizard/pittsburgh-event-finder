@@ -38,7 +38,7 @@ def fetch_webpage_content(url):
 
 def google_search(query, num_results_per_event=2, num_events=5):
     """
-    Perform a Google search, return titles, links, and webpage content for two websites per event.
+    Perform a Google search, return titles, links, and webpage content for events with two valid sources.
     
     :param query: The search query (string)
     :param num_results_per_event: Number of links to gather per event (default: 2)
@@ -70,6 +70,10 @@ def google_search(query, num_results_per_event=2, num_events=5):
         # Get the links from multiple search results for each event
         link_elements = result.find_all('a', href=True)[:num_results_per_event]  # Get the first N links per event
         links = [link_element['href'] for link_element in link_elements]
+
+        # Ensure we have at least 2 valid links for this event, skip if not
+        if len(links) < 2:
+            continue
 
         # Fetch content from each link
         contents = [fetch_webpage_content(link) for link in links]
@@ -115,7 +119,8 @@ schema_description = (
     )
 
 context = (
-
+    "You are a model that finds information on events happening in the city of Pittsburgh in the time period and within the categories requested by the user."
+    "When requested the model will use the provided information scraped from the web and find an event that matches the criteria put forward by the user."
 )
 
 # landing page api route
@@ -150,8 +155,8 @@ def events():
 
     
     messages = [
-        {"role": "system", "content": schema_description},
         {"role": "system", "content": context},
+        {"role": "system", "content": schema_description},
         {"role": "user", "content": gpt_prompt},
     ]
     response = client.chat.completions.create(
