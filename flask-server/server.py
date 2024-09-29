@@ -1,10 +1,87 @@
-from flask import Flask
-from flask import request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
+from openai import OpenAI
 import json
-import google.generativeai as genai
-from google.ai.generativelanguage_v1beta.types import content
 import os
+import requests
+from bs4 import BeautifulSoup
+import urllib.parse
+
+# web scraping
+def fetch_webpage_content(url):
+    """
+    Fetches and returns the textual content of a webpage.
+    :param url: URL of the webpage
+    :return: Extracted textual content of the webpage
+    """
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+    
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raises an HTTPError for bad responses
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # Extract the text content from the webpage. Customize this part based on the page structure
+        # Here we remove script and style elements to get meaningful content
+        for script in soup(["script", "style"]):
+            script.decompose()  # Remove script and style tags
+        
+        text = soup.get_text()
+        lines = [line.strip() for line in text.splitlines() if line.strip()]  # Clean up extra spaces and newlines
+        content = ' '.join(lines)  # Join the cleaned lines into a single string
+        return content[:3000]  # Limit the content size (for example, first 2000 characters to avoid too much data)
+    
+    except requests.exceptions.RequestException as e:
+        return f"Error fetching content from {url}: {e}"
+
+def google_search(query, num_results_per_event=2, num_events=5):
+    """
+    Perform a Google search, return titles, links, and webpage content for two websites per event.
+    
+    :param query: The search query (string)
+    :param num_results_per_event: Number of links to gather per event (default: 2)
+    :param num_events: Number of search result entries to return (default: 5)
+    :return: List of dictionaries with 'title', 'links', and 'contents' for each event.
+    """
+    query = urllib.parse.quote_plus(query)
+    url = f"https://www.google.com/search?q={query}"
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        return f"Error: Unable to perform search. Status code: {response.status_code}"
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    results = []
+    search_results = soup.find_all('div', class_='g')
+
+    # Loop over the search results to extract information
+    for i, result in enumerate(search_results[:num_events]):
+        title_element = result.find('h3')
+        if not title_element:
+            continue
+        title = title_element.text
+
+        # Get the links from multiple search results for each event
+        link_elements = result.find_all('a', href=True)[:num_results_per_event]  # Get the first N links per event
+        links = [link_element['href'] for link_element in link_elements]
+
+        # Fetch content from each link
+        contents = [fetch_webpage_content(link) for link in links]
+
+        # Append the result with title, links, and webpage contents
+        results.append({
+            'title': title,
+            'links': links,
+            'contents': contents  # List of contents from the two websites
+        })
+
+    return results
 
 # Flask app definintion
 app = Flask(__name__)
@@ -13,108 +90,32 @@ CORS(app)
 # CORS(app, origins=[os.environ["FRONTEND_URL"]])
 
 # Gemini AI Configuration
-genai.configure(api_key=os.environ["API_KEY"])
+#genai.configure(api_key='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')
 
-# Create the model
-events_config = {
-  "temperature": 0.05,
-  "top_p": 0.95,
-  "top_k": 64,
-  "max_output_tokens": 5000,
-  "response_schema": content.Schema(
-    type = content.Type.OBJECT,
-    properties = {
-      "events": content.Schema(
-        type = content.Type.ARRAY,
-        items = content.Schema(
-          type = content.Type.OBJECT,
-          properties = {
-              "date": content.Schema(
-                  type = content.Type.STRING
-              ),
-              "location": content.Schema(
-                  type = content.Type.STRING
-              ),
-              "time": content.Schema(
-                  type = content.Type.STRING
-              ),
-              "name": content.Schema(
-                  type = content.Type.STRING
-              ),
-              "description": content.Schema(
-                  type = content.Type.STRING
-              ),
-              "search-source": content.Schema(
-                  type = content.Type.STRING
-              )
-          }
-        ),
-      ),
-    },
-  ),
-  "response_mime_type": "application/json",
-}
-
-# Create the model
-details_config = {
-  "temperature": 0.05,
-  "top_p": 0.95,
-  "top_k": 64,
-  "max_output_tokens": 5000,
-  "response_schema": content.Schema(
-    type = content.Type.OBJECT,
-    properties = {
-        "date": content.Schema(
-            type = content.Type.STRING
-        ),
-        "location": content.Schema(
-            type = content.Type.STRING
-        ),
-        "time": content.Schema(
-            type = content.Type.STRING
-        ),
-        "name": content.Schema(
-            type = content.Type.STRING
-        ),
-        "description": content.Schema(
-            type = content.Type.STRING
-        ),
-        "event-web-source": content.Schema(
-            type = content.Type.STRING
-        ),
-        "parking": content.Schema(
-            type = content.Type.STRING
-        ),
-        "parking-web-source": content.Schema(
-            type = content.Type.STRING
-        ),
-        "weather": content.Schema(
-            type = content.Type.STRING
-        ),
-        "weather-web-source": content.Schema(
-            type = content.Type.STRING
-        ),
-    }
-  ),
-  "response_mime_type": "application/json",
-}
-
-model = genai.GenerativeModel(
-  model_name="gemini-1.5-flash",
-  generation_config=events_config,
-  # safety_settings = Adjust safety settings
-  # See https://ai.google.dev/gemini-api/docs/safety-settings
-
-  system_instruction="This model finds information on events happening in the city of Pittsburgh in the time period requested by the user by searching google. When requested the model will search the google and find an event. It must then find another event with a strictly different search and repeat this until it has compiled as many events that fit the criteria and that are happening within the specified time period before returning to the user. It must not, under any circumstances, fabricate information or theorize about events or event dates and times, if it does not find the information from the search it cannot include it.",
-
+# OpenAI API Configuration
+client = OpenAI(
+    # This is the default and can be omitted
+    organization=os.environ['OPEN_AI_ORG'],
+    project=os.environ['OPEN_AI_PROJ']
 )
 
-details_model = genai.GenerativeModel(
-  model_name="gemini-1.5-flash",
-  generation_config=details_config,
-  # safety_settings = Adjust safety settings
-  # See https://ai.google.dev/gemini-api/docs/safety-settings
-  system_instruction="This model finds information on a specific event happening in the city of pittsburgh and gives detailed information by searching google regarding the event, search the web for information regarding the weather around the event, and search the web for information regarding the parking available around the event. It must not, under any circumstances, fabricate information or theorize about events, if it does not find the information when searching it cannot include it.",
+
+schema_description = (
+        "Please respond with a list of events in the following json format:\n"
+        "'events': 'a list of all the events gathered' {\n"
+        "  'event': 'the object containing event information' {"
+        "       'date': 'The date of the event.',\n"
+        "       'description': 'Detailed explanation of the event.',\n"
+        "       'time': 'The time of the event.',\n"
+        "       'web-source': 'The source on the web the info was gathered from.',\n"
+        "       'name': 'The name of the event.',\n"
+        "       'location': 'The location of the event.',\n"
+        "   }"
+        "}"
+    )
+
+context = (
+
 )
 
 # landing page api route
@@ -133,10 +134,35 @@ def events():
     start = request.args.get("start")
     end = request.args.get("end")
     category = request.args.get("type")
-    chat_session = model.start_chat()
-    response = chat_session.send_message(f'Give me information on {category} events in pittsburgh between the dates {start} and {end} by searching on google')
-    print(response.text)
-    return {"events": json.loads(response.text)}
+    userMessage = f'Information on {category} events in pittsburgh between the dates {start} and {end}.'
+    
+    # First, perform the search using google_search
+    search_results = google_search(userMessage)
+
+    # Format the search results to pass to GPT for further processing
+    formatted_results = "\n\n".join(
+        [f"Title: {result['title']}\nLinks: {', '.join(result['links'])}\nContent 1: {result['contents'][0]}\nContent 2: {result['contents'][1]}" for result in search_results if len(result['contents']) >= 2]
+    )
+    print(formatted_results)
+
+    # Use GPT to process the search results and generate a final response
+    gpt_prompt = f"The user asked: '{userMessage}'. Here are some search results:\n{formatted_results}\nBased on these results, provide an appropriate response."
+
+    
+    messages = [
+        {"role": "system", "content": schema_description},
+        {"role": "system", "content": context},
+        {"role": "user", "content": gpt_prompt},
+    ]
+    response = client.chat.completions.create(
+        messages=messages,
+        model="gpt-4o",
+        temperature=0.1,
+    )
+
+    resp = response.choices[0].message.content.strip("```json").strip("```")
+    print(resp)
+    return json.loads(resp)
 
 # events/details api route
     # start = the start date for the event for which the details are being gathered
@@ -148,7 +174,10 @@ def details():
     start = request.args.get("start")
     end = request.args.get("end")
     event = request.args.get("event")
-    chat_session = details_model.start_chat()
+    messages = [
+        {"role": "system", "content": schema_description},
+        {"role": "user", "content": context},
+    ]
     response = chat_session.send_message(f'Give me detailed information, including weather and parking concerns, on {event} happening on the date: {start}-{end} as well as a lengthy description of the event')
     print(response.text)
     return {"events": json.loads(response.text)}
