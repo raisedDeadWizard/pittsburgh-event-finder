@@ -17,7 +17,7 @@ genai.configure(api_key=os.environ["API_KEY"])
 
 # Create the model
 events_config = {
-  "temperature": 0.5,
+  "temperature": 0.05,
   "top_p": 0.95,
   "top_k": 64,
   "max_output_tokens": 5000,
@@ -57,7 +57,7 @@ events_config = {
 
 # Create the model
 details_config = {
-  "temperature": 0.5,
+  "temperature": 0.05,
   "top_p": 0.95,
   "top_k": 64,
   "max_output_tokens": 5000,
@@ -104,7 +104,7 @@ model = genai.GenerativeModel(
   generation_config=events_config,
   # safety_settings = Adjust safety settings
   # See https://ai.google.dev/gemini-api/docs/safety-settings
-  system_instruction="This model finds information on events happening in the city of Pittsburgh in the time period requested by the user.\n\nWhen requested the model will search the web and find an event on one website source. It must then find another event on a strictly different website (different domain) until it has compiled at least 5 events before returning to the user making sure to cite the source of the information at the end of each event.",
+  system_instruction="This model finds information on events happening in the city of Pittsburgh in the time period requested by the user.\n\nWhen requested the model will search the web and find an event on one website source. It must then find another event on a strictly different website (different domain) until it has compiled at least 5 events with a maximum of 10 events before returning to the user making sure to cite the source of the information at the end of each event.",
 )
 
 details_model = genai.GenerativeModel(
