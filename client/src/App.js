@@ -5,14 +5,16 @@ function App() {
   // State variables for start date, end date, and events with subcategories
 
   const eventCategories = {
-    "Cultural Events": { selected: false, subcategories: { "Festivals": true, "Art exhibitions": true} },
-    conference: { selected: false, subcategories: { networking: true, panels: true } },
-    webinar: { selected: false, subcategories: { liveQnA: true, recordings: true } },
-    workshop: { selected: false, subcategories: { handsOn: true, groupWork: true } },
-    art: { selected: false, subcategories: { craft: true, exhibit: true } },
-    "Cultural Events": { selected: false, subcategories: { Festivals: true, "Art exhibitions": true } },
-    "Sports Events": { selected: false, subcategories: { "Races": true, "Tournaments": true } },
-    "Sports Events": { selected: false, subcategories: { "Races": true, "Tournaments": true } },
+    "Nightlife": { selected: false, subcategories: { "Concerts": true, "Theater": true, "Clubs/Bars": true,} },
+    "Sports": { selected: false, subcategories: { "Games": true, "Fitness": true, "Outdoor": true,} },
+    "Arts": { selected: false, subcategories: { "Exhibits": true, "Festivals": true, "Classes": true,} },
+    "Food/Drink": { selected: false, subcategories: { "Festivals": true, "Classes": true, "Dinners": true,} },
+    "Community": { selected: false, subcategories: { "Volunteer": true, "Meetups": true, "Charity": true,} },
+    "Education": { selected: false, subcategories: { "Talks": true, "Clases": true, "Tours": true,} },
+    "Wellness": { selected: false, subcategories: { "Retreats": true, "Screenings": true, "Support": true,} },
+    "Shopping": { selected: false, subcategories: { "Markets": true, "Flea Market": true, "Pop-ups": true,} },
+    "Tech": { selected: false, subcategories: { "Conferences": true, "Hackathon": true, "Launches": true,} },
+    "Outdoor": { selected: false, subcategories: { "Walks": true, "Festivals": true, "Adventure": true,} },
   };
 
   const [startDate, setStartDate] = useState('');
@@ -58,7 +60,7 @@ function App() {
 
   return (
     <div className="App">
-      <h2>Filter Events</h2>
+      <h2>Pittsburgh Event Finder</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="start-date">Start Date:</label>
@@ -107,7 +109,7 @@ function App() {
             </div>
           ))}
         </div>
-        <button type="submit">Filter</button>
+        <button type="submit">Search Events</button>
       </form>
     </div>
   );
