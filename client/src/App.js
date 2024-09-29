@@ -3,13 +3,24 @@ import './App.css'; // Assuming you have some CSS styling in App.css
 
 function App() {
   // State variables for start date, end date, and events with subcategories
+
+  const eventCategories = {
+    "Nightlife": { selected: false, subcategories: { "Concerts": true, "Theater": true, "Clubs/Bars": true,} },
+    "Sports": { selected: false, subcategories: { "Games": true, "Fitness": true, "Outdoor": true,} },
+    "Arts": { selected: false, subcategories: { "Exhibits": true, "Festivals": true, "Classes": true,} },
+    "Food/Drink": { selected: false, subcategories: { "Festivals": true, "Classes": true, "Dinners": true,} },
+    "Community": { selected: false, subcategories: { "Volunteer": true, "Meetups": true, "Charity": true,} },
+    "Education": { selected: false, subcategories: { "Talks": true, "Clases": true, "Tours": true,} },
+    "Wellness": { selected: false, subcategories: { "Retreats": true, "Screenings": true, "Support": true,} },
+    "Shopping": { selected: false, subcategories: { "Markets": true, "Flea Market": true, "Pop-ups": true,} },
+    "Tech": { selected: false, subcategories: { "Conferences": true, "Hackathon": true, "Launches": true,} },
+    "Outdoor": { selected: false, subcategories: { "Walks": true, "Festivals": true, "Adventure": true,} },
+  };
+
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [events, setEvents] = useState({
-    conference: { selected: false, subcategories: { networking: true, panels: true } },
-    webinar: { selected: false, subcategories: { liveQnA: true, recordings: true } },
-    workshop: { selected: false, subcategories: { handsOn: true, groupWork: true } },
-  });
+  const [events, setEvents] = useState(eventCategories);
+  const [customCategory, setCustomCategory] = useState('');
 
   // Function to handle changes in event checkboxes
   const handleEventChange = (event) => {
@@ -39,6 +50,36 @@ function App() {
     }));
   };
 
+  // Function to select all categories and subcategories
+  const handleSelectAll = () => {
+    setEvents((prevEvents) => {
+      const updatedEvents = {};
+      for (const [event, data] of Object.entries(prevEvents)) {
+        updatedEvents[event] = {
+          ...data,
+          selected: true,
+          subcategories: Object.fromEntries(Object.entries(data.subcategories).map(([key]) => [key, true])),
+        };
+      }
+      return updatedEvents;
+    });
+  };
+
+  // Function to deselect all categories and subcategories
+  const handleDeselectAll = () => {
+    setEvents((prevEvents) => {
+      const updatedEvents = {};
+      for (const [event, data] of Object.entries(prevEvents)) {
+        updatedEvents[event] = {
+          ...data,
+          selected: false,
+          subcategories: Object.fromEntries(Object.entries(data.subcategories).map(([key]) => [key, false])),
+        };
+      }
+      return updatedEvents;
+    });
+  };
+
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,7 +91,7 @@ function App() {
 
   return (
     <div className="App">
-      <h2>Filter Events</h2>
+      <h2>Pittsburgh Event Finder</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="start-date">Start Date:</label>
@@ -70,8 +111,8 @@ function App() {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <div className="form-group">
-          <label>Event Types:</label>
+        <div className="form-group event-options">
+          <label>Event Types:</label> 
           {Object.entries(events).map(([event, { selected, subcategories }]) => (
             <div key={event} className="event-option">
               <label>
@@ -99,7 +140,26 @@ function App() {
             </div>
           ))}
         </div>
-        <button type="submit">Filter</button>
+        <div className="button-group">
+        <button type="button" className="btn btn-secondary" onClick={handleSelectAll}>
+            Select All
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={handleDeselectAll}>
+            Deselect All
+          </button>
+        <input
+            type="text"
+            className="custom-category-input"
+            maxLength="20"
+            placeholder="Add custom category"
+            value={customCategory}
+            onChange={(e) => setCustomCategory(e.target.value)}
+          />
+          
+          <button type="submit" className="btn btn-primary">
+            Search Events
+          </button>
+        </div>
       </form>
     </div>
   );
