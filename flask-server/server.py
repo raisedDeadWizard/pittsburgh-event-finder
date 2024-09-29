@@ -105,7 +105,7 @@ model = genai.GenerativeModel(
   # safety_settings = Adjust safety settings
   # See https://ai.google.dev/gemini-api/docs/safety-settings
 
-  system_instruction="This model finds information on events happening in the city of Pittsburgh in the time period requested by the user.\n\nWhen requested the model will search the web and find an event on one website source. It must then find another event on a strictly different website (different domain) and repeat this until it has compiled as many events that fit the criteria and that are happening within the specified time period before returning to the user making sure to cite the source of the information at the end of each event. It must not, under any circumstances, fabricate information or theorize about events, if it does not find the information when searching it cannot include it.",
+  system_instruction="This model finds information on events happening in the city of Pittsburgh in the time period requested by the user by searching google.\n\nWhen requested the model will search the google and find an event. It must then find another event on a strictly with a strictly different search and repeat this until it has compiled as many events that fit the criteria and that are happening within the specified time period before returning to the user making sure to cite the source of the information at the end of each event. It must not, under any circumstances, fabricate information or theorize about events, if it does not find the information when searching it cannot include it.",
 
 )
 
@@ -114,7 +114,7 @@ details_model = genai.GenerativeModel(
   generation_config=details_config,
   # safety_settings = Adjust safety settings
   # See https://ai.google.dev/gemini-api/docs/safety-settings
-  system_instruction="This model finds information on a specific event happening in the city of pittsburgh and gives detailed information by searching the web regarding the event, search the web for information regarding the weather around the event, and search the web for information regarding the parking available around the event. It must not, under any circumstances, fabricate information or theorize about events, if it does not find the information when searching it cannot include it.",
+  system_instruction="This model finds information on a specific event happening in the city of pittsburgh and gives detailed information by searching google regarding the event, search the web for information regarding the weather around the event, and search the web for information regarding the parking available around the event. It must not, under any circumstances, fabricate information or theorize about events, if it does not find the information when searching it cannot include it.",
 )
 
 # landing page api route
@@ -134,7 +134,7 @@ def events():
     end = request.args.get("end")
     category = request.args.get("type")
     chat_session = model.start_chat()
-    response = chat_session.send_message(f'Give me information on {category} events in pittsburgh between the dates {start} and {end}, try and get at least 5 events')
+    response = chat_session.send_message(f'Give me information on {category} events in pittsburgh between the dates {start} and {end} by searching on google, try and get at least 5 events but do not fabricate or alter information')
     print(response.text)
     return {"events": json.loads(response.text)}
 
