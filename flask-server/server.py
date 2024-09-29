@@ -94,9 +94,8 @@ CORS(app)
 
 # OpenAI API Configuration
 client = OpenAI(
-    # This is the default and can be omitted
-    organization=os.environ['OPEN_AI_ORG'],
-    project=os.environ['OPEN_AI_PROJ']
+    organization=os.getenv('OPENAI_ORG_ID'),
+    project=os.getenv('OPENAI_PROJ_ID'),
 )
 
 
