@@ -10,7 +10,7 @@ function App() {
     "Sports": { selected: false, subcategories: { "Games": true, "Fitness": true, "Outdoor": true, } },
     "Arts": { selected: false, subcategories: { "Exhibits": true, "Festivals": true, "Classes": true, } },
     "Food/Drink": { selected: false, subcategories: { "Festivals": true, "Classes": true, "Dinners": true, } },
-    "Community": { selected: false, subcategories: { "Volunteer": true, "Meetups": true, "Charity": true, } },
+    "Civic": { selected: false, subcategories: { "Town Hall": true, "Voting": true, "Volunteer": true, } },
     "Education": { selected: false, subcategories: { "Talks": true, "Clases": true, "Tours": true, } },
     "Wellness": { selected: false, subcategories: { "Retreats": true, "Screenings": true, "Support": true, } },
     "Shopping": { selected: false, subcategories: { "Markets": true, "Flea Market": true, "Pop-ups": true, } },
@@ -21,6 +21,7 @@ function App() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [events, setEvents] = useState(eventCategories);
+  const [eventList, setEventList] = useState([]);
   const [customCategory, setCustomCategory] = useState('');
 
   // Function to handle changes in event checkboxes
@@ -156,9 +157,9 @@ function App() {
             value={customCategory}
             onChange={(e) => setCustomCategory(e.target.value)}
           />
-          <button type="submit" className="btn btn-primary" 
+          <button type="submit" className="btn btn-primary"
             onClick={async () => {
-              let resp = await fetchEvents("september 28th 2024", "october 1st 2024", customCategory)
+              let resp = await (fetchEvents("september 28th 2024", "october 1st 2024", customCategory))
               console.log("[RESPONSE]: ", resp);
               setEventList(resp.events);
               console.log("[RESPONSE] eventList: ", eventList)
@@ -168,6 +169,24 @@ function App() {
           </button>
         </div>
       </form>
+
+      <div className="event-list">
+        {eventList.length > 0 ? (
+          eventList.map((event, index) => (
+            <div key={index} className="event-item">
+              <h3>{event.name}</h3>
+              <p>Date: {event.date}</p>
+              <p>Time: {event.time}</p>
+              <p>Location: {event.location}</p>
+              <p>Description: {event.description}</p>
+              <p>Source: <a href={event["web-source"]} target="_blank" rel="noopener noreferrer">{event["web-source"]}</a></p>
+            </div>
+          ))
+        ) : (
+          <p>No events found. Please search to display events.</p>
+        )}
+      </div>
+
     </div>
   );
 }
