@@ -10,7 +10,7 @@ function App() {
     "Sports": { selected: false, subcategories: { "Games": true, "Fitness": true, "Outdoor": true, } },
     "Arts": { selected: false, subcategories: { "Exhibits": true, "Festivals": true, "Classes": true, } },
     "Food/Drink": { selected: false, subcategories: { "Festivals": true, "Classes": true, "Dinners": true, } },
-    "Community": { selected: false, subcategories: { "Volunteer": true, "Meetups": true, "Charity": true, } },
+    "Civic": { selected: false, subcategories: { "Town Hall": true, "Voting": true, "Volunteer": true, } },
     "Education": { selected: false, subcategories: { "Talks": true, "Clases": true, "Tours": true, } },
     "Wellness": { selected: false, subcategories: { "Retreats": true, "Screenings": true, "Support": true, } },
     "Shopping": { selected: false, subcategories: { "Markets": true, "Flea Market": true, "Pop-ups": true, } },
@@ -156,7 +156,7 @@ function App() {
             value={customCategory}
             onChange={(e) => setCustomCategory(e.target.value)}
           />
-          <button type="submit" className="btn btn-primary" 
+          <button type="submit" className="btn btn-primary"
             onClick={async () => {
               let resp = await fetchEvents("september 28th 2024", "october 1st 2024", customCategory)
               console.log("[RESPONSE]: ", resp);
